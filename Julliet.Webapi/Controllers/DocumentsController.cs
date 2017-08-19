@@ -3,11 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Julliet.Engine;
+using Julliet.Webapi.Repositories;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Http;
 
 namespace Julliet.Webapi.Controllers
 {
     [Route("api/[controller]")]
-    public class ValuesController : Controller
+    public class DocumentsController : Controller
     {
         // GET api/values
         [HttpGet]
@@ -25,8 +30,16 @@ namespace Julliet.Webapi.Controllers
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody]string value)
+        public void Post([FromBody] dynamic body)
         {
+            // actionContext = ;
+            //var requestHeader = HttpContext.Request.Headers;
+            //var requestBody = HttpContext.Request.Body;
+
+            
+
+            var processLetter = new ProcessLetter();
+            processLetter.ReadLetter(Convert.ToString(body));
         }
 
         // PUT api/values/5

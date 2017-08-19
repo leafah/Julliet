@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RestSharp;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -12,20 +13,21 @@ namespace Julliet.Engine
     {
         private string template { get; set; }
 
-        public HttpWebRequest Request { get; private set; }
+        //public RestRequest Request { get; private set; }
 
-        public HttpClient client { get; set; }
+        public RestClient client { get; set; }
 
         public LetterParser(string template)
         {
             this.template = template;
 
-            this.client = new HttpClient();
+            this.client = new RestClient();
         }        
 
-        public HttpRequestMessage ParseToWebRequest(Dictionary<string, string> propertyCollection)
+        public RestRequest ParseToWebRequest(Dictionary<string, string> propertyCollection)
         {
-            HttpRequestMessage request = new HttpRequestMessage();
+
+            var request = new RestRequest();
 
             StringBuilder bodyBuilder = new StringBuilder();
 
@@ -35,25 +37,25 @@ namespace Julliet.Engine
 
                 if (fmtLine.StartsWith("->"))
                 {
-                    request.RequestUri = new Uri(GetUrlByLine(fmtLine));
+                    client.BaseUrl = new Uri(GetUrlByLine(fmtLine));
                 }
                 else if (fmtLine.StartsWith("##"))
                 {
-                    var headerSplitted = fmtLine.Substring(2, fmtLine.Length - 2).Trim().Split(':');
-
-                    request.Headers.Add(headerSplitted[0], headerSplitted[1]);
+                    var headerSplitted = fmtLine.Substring(2, fmtLine.Length - 2).Trim().Replace('\"', ' ').Split(':');
+                    request.AddHeader(headerSplitted[0], headerSplitted[1]);
                 }
                 else if (fmtLine.StartsWith("#"))
                 {
-                    request.Method = new HttpMethod(fmtLine.Substring(1, fmtLine.Length - 1).Trim());
+                    Method metodo;
+                    Enum.TryParse<Method>(fmtLine.Substring(1, fmtLine.Length - 1).Trim(), out metodo);
+                    request.Method = metodo;
                 }
                 else
                 {
                     bodyBuilder.AppendLine(fmtLine);
                 }
             };
-
-            request.Content = new StringContent(BindBody(bodyBuilder, propertyCollection), Encoding.UTF8);
+            request.AddParameter("", BindBody(bodyBuilder, propertyCollection), ParameterType.RequestBody); 
 
             return request;
         }

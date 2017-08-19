@@ -4,4 +4,8 @@
     <TargetFramework>netcoreapp1.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="RestSharp.NetCore" Version="105.2.4-rc4-24214-01" />
+  </ItemGroup>
+
 </Project>
