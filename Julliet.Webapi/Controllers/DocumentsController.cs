@@ -8,6 +8,7 @@ using Julliet.Webapi.Repositories;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Http;
+using RestSharp;
 
 namespace Julliet.Webapi.Controllers
 {
@@ -32,13 +33,9 @@ namespace Julliet.Webapi.Controllers
         [HttpPost]
         public void Post([FromBody] dynamic body)
         {
-            // actionContext = ;
-            //var requestHeader = HttpContext.Request.Headers;
-            //var requestBody = HttpContext.Request.Body;
-
-            
-
-            var processLetter = new ProcessLetter();
+            var cl = HttpContext.Request;
+            var letter = cl.Headers.Where(a => a.Key == "letter").ToList();
+            var processLetter = new ProcessLetter(letter.FirstOrDefault().Value.ToString());
             processLetter.ReadLetter(Convert.ToString(body));
         }
 

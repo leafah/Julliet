@@ -1,4 +1,6 @@
-﻿using RestSharp;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -55,7 +57,7 @@ namespace Julliet.Engine
                     bodyBuilder.AppendLine(fmtLine);
                 }
             };
-            request.AddParameter("", BindBody(bodyBuilder, propertyCollection), ParameterType.RequestBody); 
+            request.AddParameter("application/json", BindBody(bodyBuilder, propertyCollection), ParameterType.RequestBody); 
 
             return request;
         }
@@ -79,5 +81,80 @@ namespace Julliet.Engine
 
             return body;
         }
-    } 
+
+        public RestRequest ParseToWebResponse(Dictionary<string, string> propertyCollection)
+        {
+            var request = new RestRequest();
+
+            StringBuilder bodyBuilder = new StringBuilder();
+
+            foreach (string line in template.Split('\n'))
+            {
+                var fmtLine = line.Trim();
+
+                if (fmtLine.StartsWith("->"))
+                {
+                    client.BaseUrl = new Uri(GetUrlByLine(fmtLine));
+                }
+                else if (fmtLine.StartsWith("##"))
+                {
+                    var headerSplitted = fmtLine.Substring(2, fmtLine.Length - 2).Trim().Replace('\"', ' ').Split(':');
+                    request.AddHeader(headerSplitted[0], headerSplitted[1]);
+                }
+                else if (fmtLine.StartsWith("#"))
+                {
+                    Method metodo;
+                    Enum.TryParse<Method>(fmtLine.Substring(1, fmtLine.Length - 1).Trim(), out metodo);
+                    request.Method = metodo;
+                }
+                else
+                {
+                    bodyBuilder.AppendLine(fmtLine);
+                }
+            };
+            request.AddParameter("application/json", Testando(bodyBuilder, propertyCollection), ParameterType.RequestBody);
+
+            return request;
+        }
+
+        private string Testando(StringBuilder bodyBuilder, Dictionary<string, string> propertyCollection)
+        {
+            string body = bodyBuilder.ToString();
+            Dictionary<string, string> propertyLetter = new Dictionary<string, string>();
+
+            JObject jsonR = JObject.Parse(body);
+            foreach (var no in jsonR.Values())
+            {
+                propertyLetter.Add(no.Path, no.Value<string>());
+            }
+
+            foreach (var keyLetter in propertyLetter.Keys)
+            {
+                string conteudoInterno;
+                propertyCollection.TryGetValue(keyLetter, out conteudoInterno);
+
+                string conteudoName;
+                propertyLetter.TryGetValue(keyLetter, out conteudoName);
+
+                body = body.Replace(conteudoName, $"{conteudoInterno}");
+                body = body.Replace(keyLetter, conteudoName.Substring(2, conteudoName.Length - 4));
+            }
+
+            return body;
+        }
+
+        //private Dictionary<string, string> ParseToDictionary(string template, string rawResponse)
+        //{
+        //    Dictionary<string, string> navigate = new Dictionary<string, string>();
+
+        //    JObject data = JsonConvert.DeserializeObject<JObject>(template);
+
+        //    data.Value()
+
+        //    foreach (var item in data.Descendants())
+        //    {
+
+        //    }
+        //}
+    }
 }
