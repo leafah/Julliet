@@ -1,0 +1,55 @@
+body {
+  font-size: 100%;
+}
+
+.App-header {
+  background-color: #040306;
+  height: 10em;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.App-header-title {
+  font-size: 2em;
+  margin-left: 2em;
+  margin-bottom: 0;
+}
+
+.App-header-image {
+  height: 100%;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+.App-nav {
+  display: flex;
+  border-bottom: 1px solid #cacaca;
+}
+
+.App-nav span {
+  font-size: 1em;
+  padding: 0.5em 1em;
+}
+
+.App-nav span {
+  border-right: 1px solid #cacaca;
+}
+.App-nav span:first-child {
+  border-left: none;
+}
+
+.App-nav span:hover,
+.App-nav span:focus {
+  background: #cacaca;
+  color: #000;
+  cursor: pointer;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
