@@ -8,6 +8,8 @@ using Julliet.Webapi.Repositories;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json.Linq;
+using System.IO;
 
 namespace Julliet.Webapi.Controllers
 {
@@ -32,14 +34,31 @@ namespace Julliet.Webapi.Controllers
         [HttpPost]
         public void Post([FromBody] dynamic body)
         {
-            // actionContext = ;
-            //var requestHeader = HttpContext.Request.Headers;
-            //var requestBody = HttpContext.Request.Body;
+            LetterReader letter = new LetterReader(HttpContext.Request.Headers["Letter"], @"C:\Letter\");
 
-            
+            JObject jRequest = JObject.Parse(Convert.ToString(body));
 
-            var processLetter = new ProcessLetter();
-            processLetter.ReadLetter(Convert.ToString(body));
+            Dictionary<string, string> parametersCollection = new Dictionary<string, string>();
+
+            foreach (var parameters in jRequest.Values())
+            {
+                parametersCollection.Add(parameters.Path, parameters.Value<string>());
+            }
+
+            var request = letter.GetRequestByLetter(parametersCollection);
+
+            var response = letter.Client.Execute(request);
+
+            var dictionary = letter.GetValuesFromResponse(JObject.Parse(response.Content));
+
+            JObject jObject = new JObject();
+
+            foreach (var item in dictionary)
+            {
+                jObject.Add(item.Key, item.Value);
+            }
+
+            Response.WriteAsync(jObject.ToString());
         }
 
         // PUT api/values/5
