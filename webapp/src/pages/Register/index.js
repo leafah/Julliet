@@ -3,6 +3,7 @@ import 'milligram/dist/milligram.css'
 import './style.css'
 import { merge } from 'ramda'
 import axios from 'axios'
+import shortid from 'shortid'
 import {
   addKeyPairItem,
   updateKeyPairItem,
@@ -17,13 +18,16 @@ export default class Register extends Component {
     this.state = {
       headers: [{
         key: 'Content-Type',
-        value: 'application/json'
+        value: 'application/json',
+        id: shortid.generate()
       }],
       body: [],
       type: 'json',
       method: 'post',
       url: 'https://api.pagar.me/1',
-      letterType: 'response'
+      letterType: 'response',
+      letterPath: '',
+      latterName: ''
     }
 
     this.addHeaderItem = this.addHeaderItem.bind(this)
@@ -35,6 +39,8 @@ export default class Register extends Component {
     this.changeMethod = this.changeMethod.bind(this)
     this.submitForm = this.submitForm.bind(this)
     this.updateLetterType = this.updateLetterType.bind(this)
+    this.updateLetterName = this.updateLetterName.bind(this)
+    this.updateLetterPath = this.updateLetterPath.bind(this)
   }
 
   changeType (event) {
@@ -97,6 +103,21 @@ export default class Register extends Component {
     })
   }
 
+  updateLetterPath (event) {
+    const { value } = event.target
+    this.setState({
+      letterPath: value
+    })
+  }
+
+  updateLetterName (event) {
+    const { value } = event.target
+    this.setState({
+      letterName: value,
+      letterPath: value + this.state.letterPath
+    })
+  }
+
   render() {
     return (
       <main className="container">
@@ -105,6 +126,32 @@ export default class Register extends Component {
         <form
           onSubmit={this.submitForm.bind(this)}
         >
+          <div className="input-row">
+            <div>
+              <label>
+                Letter Name:
+                <input
+                  type="text"
+                  name="letterName"
+                  required
+                  onChange={this.updateLetterName}
+                  defaultValue={this.state.letterName}
+                />
+              </label>
+            </div>
+            <div>
+              <label>
+                Letter Path:
+                <input
+                  type="text"
+                  required
+                  name="letterPath"
+                  onChange={this.updateLetterPath}
+                  defaultValue={this.state.letterPath}
+                />
+              </label>
+            </div>
+          </div>
           <div>
             <label>
               Letter Type:

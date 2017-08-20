@@ -18,3 +18,12 @@
 .button.large {
   font-size: 1.5em;
 }
+
+.input-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.input-row > div {
+  width: 49%
+}
