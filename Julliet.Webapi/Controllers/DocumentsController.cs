@@ -16,25 +16,12 @@ namespace Julliet.Webapi.Controllers
     [Route("api/[controller]")]
     public class DocumentsController : Controller
     {
-        // GET api/values
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
 
         // POST api/values
         [HttpPost]
         public void Post([FromBody] dynamic body)
         {
-            LetterReader letter = new LetterReader(HttpContext.Request.Headers["Letter"], @"C:\Letter\");
+            LetterReader letter = new LetterReader(HttpContext.Request.Headers["Letter"], @"C:\Julliet\");
 
             JObject jRequest = JObject.Parse(Convert.ToString(body));
 
@@ -59,18 +46,6 @@ namespace Julliet.Webapi.Controllers
             }
 
             Response.WriteAsync(jObject.ToString());
-        }
-
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }
