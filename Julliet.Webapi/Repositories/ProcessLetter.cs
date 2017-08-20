@@ -20,9 +20,9 @@ namespace Julliet.Webapi.Repositories
                 dic.Add(no.Path, no.Value<string>());
             }
 
-            LetterParser lp = new LetterParser(letter);
-            var a = lp.ParseToWebRequest(dic);
-            var response = lp.client.Execute(a);
+            //LetterParser lp = new LetterParser(letter);
+            //var a = lp.ParseToWebRequest(dic);
+            //var response = lp.client.Execute(a);
         }
 
         public void WriteLetter()
