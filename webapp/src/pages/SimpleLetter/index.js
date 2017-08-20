@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import 'milligram/dist/milligram.css'
 import './style.css'
+import Editor from '../../components/Editor'
 
 export default class SimpleLetter extends Component {
   constructor () {
@@ -14,6 +15,7 @@ export default class SimpleLetter extends Component {
     this.updateName = this.updateName.bind(this)
     this.updateType = this.updateType.bind(this)
     this.updateLetter = this.updateLetter.bind(this)
+    this.submitForm = this.submitForm.bind(this)
   }
 
   updateName ({ target }) {
@@ -28,15 +30,15 @@ export default class SimpleLetter extends Component {
     })
   }
 
-  updateLetter ({ target }) {
-    this.setState({
-      letter: target.value
-    })
+  updateLetter (letter) {
+    console.log('letter', letter);
+    this.setState({ letter })
   }
 
   submitForm (event) {
     event.preventDefault()
 
+    console.log(this.state)
     console.log(JSON.stringify(this.state, null, 2, 2))
   }
 
@@ -48,7 +50,7 @@ export default class SimpleLetter extends Component {
     } = this.state
 
     return (
-      <div className="container">
+      <div className="container space">
         <h1>Cadastrar Carta</h1>
 
         <p>Entre com as informações abaixo corretamente!</p>
@@ -88,16 +90,13 @@ export default class SimpleLetter extends Component {
             </div>
           </div>
 
-          <label htmlFor="textarea-001">Carta:</label>
-          <textarea
-            name="letter"
-            id="textarea-001"
-            required
-            onChange={this.updateLetter}
-            defaultValue={letter}
-          ></textarea>
+          <label>Carta:</label>
 
-          <div>
+          <Editor
+            onCodeChange={this.updateLetter}
+          />
+
+          <div className="space">
             <button
               type="submit"
             >Salvar Carta</button>

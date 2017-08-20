@@ -30,20 +30,24 @@ body {
   border-bottom: 1px solid #cacaca;
 }
 
-.App-nav span {
+.App-nav > div {
+  display: flex;
+}
+
+.App-nav a {
   font-size: 1em;
   padding: 0.5em 1em;
 }
 
-.App-nav span {
+.App-nav a {
   border-right: 1px solid #cacaca;
 }
-.App-nav span:first-child {
+.App-nav a:first-child {
   border-left: none;
 }
 
-.App-nav span:hover,
-.App-nav span:focus {
+.App-nav a:hover,
+.App-nav a:focus {
   background: #cacaca;
   color: #000;
   cursor: pointer;
