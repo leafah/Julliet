@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import './App.css';
 
-import Register from './pages/Register';
-import Letters from './pages/Letters';
+import SimpleLetter from './pages/SimpleLetter';
 import HowItWorks from './pages/HowItWorks';
 const logo = '/letters-photo.png';
 
@@ -19,13 +18,11 @@ class App extends Component {
           <div>
             <nav className="App-nav">
               <span><Link to="/">How it Works</Link></span>
-              <span><Link to="/letters">Letters</Link></span>
-              <span><Link to="/register">Add Letter</Link></span>
+              <span><Link to="/letter">Letter</Link></span>
             </nav>
 
             <Route exact path="/" component={HowItWorks} />
-            <Route path="/register" component={Register} />
-            <Route path="/letters" component={Letters} />
+            <Route path="/letter" component={SimpleLetter} />
           </div>
         </Router>
       </div>
