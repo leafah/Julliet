@@ -12,9 +12,12 @@ Uma integração onde o Dev não precisa ser o principal responsável.
 
 
 Letters:
--> endpoint da API
-# Método Http
-## Headers
+->endpoint da API
+
+#Método Http
+
+##Headers
+
 
 {
   "PropriedadeDaApi":"{{PropriedadeDoSeuDominio}}"
